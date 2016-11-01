@@ -48,27 +48,23 @@ def init(service=None):
     Initialize the project on remote server.
     """
 
-    print "Initializing ..."
     tool = DeployToolKit()
-    for host in env.hosts:
-        tool._update_env(host)
+    tool.create_dir()
 
-        tool.create_dir()
+    for f in before_init:
+        tool.do(f)
 
-        for f in before_init:
-            tool.do(f)
+    tool.run('sudo apt-get install git')
+    tool.init()
+    tool.pip_install_requirements()
+    if service:
+        tool.control_service(service=service, action='start')
+    else:
+        tool.control_service(action='start')
+    tool.run_migrate_command()
 
-        tool.run('sudo apt-get install git')
-        tool.init()
-        tool.pip_install_requirements()
-        if service:
-            tool.control_service(service=service, action='start')
-        else:
-            tool.control_service(action='start')
-        tool.run_migrate_command()
-
-        for f in after_init:
-            tool.do(f)
+    for f in after_init:
+        tool.do(f)
 
 @task
 def deploy(service=None):
@@ -76,25 +72,20 @@ def deploy(service=None):
     Deploy the project.
     """
 
-    print "Deploing ..."
-
     tool= DeployToolKit()
-    for host in env.hosts:
-        tool._update_env(host)
+    for f in before_deploy:
+        tool.do(f)
 
-        for f in before_deploy:
-            tool.do(f)
+    tool.deploy()
+    tool.pip_install_requirements()
+    if service:
+        tool.control_service(service=service, action='restart')
+    else:
+        tool.control_service(action='restart')
+    tool.run_migrate_command()
 
-        tool.deploy()
-        tool.pip_install_requirements()
-        if service:
-            tool.control_service(service=service, action='restart')
-        else:
-            tool.control_service(action='restart')
-        tool.run_migrate_command()
-
-        for f in after_deploy:
-            tool.do(f)
+    for f in after_deploy:
+        tool.do(f)
 
 @task
 def rollback(service=None, commit=None):
@@ -102,26 +93,21 @@ def rollback(service=None, commit=None):
     Rollback last commit.
     """
 
-    print "Rollbacking ..."
-
     tool= DeployToolKit()
-    for host in env.hosts:
-        tool._update_env(host)
+    for f in before_rollback:
+        tool.do(f)
 
-        for f in before_rollback:
-            tool.do(f)
+    tool.rollback(commit)
+    tool.pip_install_requirements()
 
-        tool.rollback(commit)
-        tool.pip_install_requirements()
+    if service:
+        tool.control_service(service=service, action='restart')
+    else:
+        tool.control_service('restart')
+    tool.run_migrate_command()
 
-        if service:
-            tool.control_service(service=service, action='restart')
-        else:
-            tool.control_service('restart')
-        tool.run_migrate_command()
-
-        for f in after_rollback:
-            tool.do(f)
+    for f in after_rollback:
+        tool.do(f)
 
 @task
 def clear():
@@ -129,9 +115,5 @@ def clear():
     Delete a project from remote server.
     """
 
-    print "Clearing ..."
-
     tool= DeployToolKit()
-    for host in env.hosts:
-        tool._update_env(host)
-        tool.delete_dir()
+    tool.delete_dir()

@@ -8,7 +8,7 @@ with open('LICENSE') as f:
 
 setup(
     name='deploytoolkit',
-    version='0.1',
+    version='0.2',
     description='Tool for easy deploying.',
     long_description=readme,
     author='Anton Shchetikhin',

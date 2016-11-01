@@ -7,10 +7,6 @@ from fabric.api import run, env, cd
 
 class DeployToolKit(object):
 
-    def _update_env(self, host):
-        env.user = host.split("@")[0]
-        env.host_string = host
-
     # Создание папки с виртуальным окружением
     def create_dir(self):
         run('mkdir -p {path}'.format(path=env.project_root))
