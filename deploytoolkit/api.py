@@ -22,7 +22,6 @@ def production(config_path="config/production.yaml"):
 
     config = Configuration("production", config_path)
     config.set_env()
-    print env
 
 @task
 def stage(config_path="config/stage.yaml"):
@@ -32,7 +31,6 @@ def stage(config_path="config/stage.yaml"):
 
     config = Configuration("stage", config_path)
     config.set_env()
-    print env
 
 @task
 def test(config_path="config/test.yaml"):
@@ -42,7 +40,6 @@ def test(config_path="config/test.yaml"):
 
     config = Configuration("test", config_path)
     config.set_env()
-    print env
 
 
 @task
