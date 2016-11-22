@@ -30,17 +30,18 @@ class Configuration(object):
         env.passwords = _get_passwords(settings)
         env.project_root = settings.get("project_root", "")
 
-        venv = settings.get('venv_folder', 'venv')
+        venv = settings.get("venv_folder", "venv")
         env.venv = os.path.join(env.project_root, venv)
-        env.python = os.path.join(env.venv, 'bin/python')
-        env.pip = os.path.join(env.venv, 'bin/pip')
+        env.python = os.path.join(env.venv, "bin/python")
+        env.pip = os.path.join(env.venv, "bin/pip")
 
-        env.branch = settings.get('branch', 'master')
-        env.requirements = settings.get('venv_requirements',
-                'requirements.txt')
-        env.linked_service = settings.get('linked_service')
-        env.repository = settings.get('repository')
-        env.migrate_command = settings.get('migrate_command')
+        env.branch = settings.get("branch", "master")
+        env.remote = settings.get("remote", "origin")
+        env.requirements = settings.get("venv_requirements",
+                "requirements.txt")
+        env.linked_service = settings.get("linked_service")
+        env.repository = settings.get("repository")
+        env.migrate_command = settings.get("migrate_command")
 
 def _get_hosts(config_file):
     return config_file.get("servers", {}).keys()
